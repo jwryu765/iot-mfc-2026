@@ -3,6 +3,8 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="Win32ControlsApp/Win32ControlsApp.vcxproj" Id="13780c90-82bb-464a-b954-108a8c3c96a4" />
-  <Project Path="Win32FirstApp/Win32FirstApp.vcxproj" Id="cf4b22eb-a324-45cc-b5a5-5043aa85c8f6" />
+  <Project Path="MFCBasic/MFCBasic.vcxproj" />
+  <Project Path="MFCPrac/MFCPrac.vcxproj" />
+  <Project Path="Win32ControlsApp/Win32ControlsApp.vcxproj" Id="9803dfc9-4617-4ef5-b22a-e887f3c3ec4f" />
+  <Project Path="Win32FirstApp/Win32FirstApp.vcxproj" Id="7c311759-8148-43f8-a122-d4b91b1a5d5f" />
 </Solution>
