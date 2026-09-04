@@ -19,8 +19,10 @@
 
 CMFCControlsDlg::CMFCControlsDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_MFCCONTROLS_DIALOG, pParent)
-	, m_editID(_T(""))
-	, m_editPW(_T(""))
+	, m_strID(_T(""))
+	, m_strPW(_T(""))
+	, m_bAutoLogin(FALSE)
+	, m_nUserType(0)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -28,15 +30,14 @@ CMFCControlsDlg::CMFCControlsDlg(CWnd* pParent /*=nullptr*/)
 void CMFCControlsDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-	DDX_Text(pDX, IDC_EDIT_ID, m_editID);
-	DDX_Text(pDX, IDC_EDIT_PW, m_editPW);
+	DDX_Text(pDX, IDC_EDIT_ID, m_strID);
+	DDX_Text(pDX, IDC_EDIT_PW, m_strPW);
+	DDX_Check(pDX, IDC_CHK_AUTOLOGIN, m_bAutoLogin);
+	DDX_Radio(pDX, IDC_RDO_USER, m_nUserType);
 
-	DDX_Control(pDX, IDC_EDIT_ID, m_controlID);
-	DDX_Control(pDX, IDC_EDIT_PW, m_controlPW);
+	DDX_Control(pDX, IDC_EDIT_ID, m_editID);
+	DDX_Control(pDX, IDC_STATIC_STATUS, m_staticStatus);
 	DDX_Control(pDX, IDC_BTN_LOGIN, m_btnLogin);
-
-	// ID를 20자로 제한!
-	DDV_MaxChars(pDX, m_editID, 20);
 }
 
 BEGIN_MESSAGE_MAP(CMFCControlsDlg, CDialogEx)
@@ -52,6 +53,15 @@ END_MESSAGE_MAP()
 BOOL CMFCControlsDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
+
+	// 코드로 닫기버튼 추가!
+	ModifyStyle(
+		0,
+		WS_MINIMIZEBOX |
+		WS_MAXIMIZEBOX |
+		WS_THICKFRAME |
+		WS_SYSMENU
+	);
 
 	// 이 대화 상자의 아이콘을 설정합니다.  응용 프로그램의 주 창이 대화 상자가 아닐 경우에는
 	//  프레임워크가 이 작업을 자동으로 수행합니다.
@@ -102,31 +112,53 @@ HCURSOR CMFCControlsDlg::OnQueryDragIcon()
 
 void CMFCControlsDlg::OnBnClickedBtnLogin()
 {
-	UpdateData(TRUE); // DDX! GetDlgItemText() 함수 호출 대체
+	UpdateData(TRUE);
 
-	//// 입력검증(Validation Check)
-	if (m_editID.IsEmpty()) {
+	if (m_strID.IsEmpty()) {
 		AfxMessageBox(L"아이디를 입력하세요.");
+		m_editID.SetFocus(); // 포커스 재지정
 		return;
 	}
 
-	if (m_editPW.IsEmpty()) {
-		AfxMessageBox(L"패스워드를 입력하세요.");
-		return;
-	}
-
-	//AfxMessageBox(strID);
-
-	if (m_editID == L"admin" && m_editPW == L"p@ssw0rd!") {
-		AfxMessageBox(L"관리자 로그인!");
+	// 실제 DB와 연동 
+	if (m_nUserType == 0) {
+		// 사용자
+		//AfxMessageBox(L"사용자 권한");
+		if (m_strID == L"hugo" && m_strPW == "p@ssw0rd") {
+			if (m_bAutoLogin) {
+				AfxMessageBox(L"사용자(자동 로그인), " + m_strID + L" 로그인 성공!!!");
+				m_staticStatus.SetWindowTextW(L"상태 : 로그인 성공");
+			}
+			else {
+				AfxMessageBox(L"사용자(수동 로그인), " + m_strID + L" 로그인 성공!!!");
+				m_staticStatus.SetWindowTextW(L"상태 : 로그인 성공");
+			}
+			return;
+		}
+		else {
+			AfxMessageBox(L"사용자 로그인 실패!");
+			m_staticStatus.SetWindowTextW(L"상태 : 로그인 실패");
+			return;
+		}
 	}
 	else {
-		AfxMessageBox(L"로그인 실패!!!");
-	}
+		//AfxMessageBox(L"관리자 권한");
+
+		if (m_strID == L"admin" && m_strPW == L"123456") {
+			// 관리자 로그인 성공
+			AfxMessageBox(L"관리자 로그인 성공!!!");
+			return;
+		}
+		else {
+			// 관리자 로그인 실패
+			AfxMessageBox(L"관리자 로그인 실패!");
+			return;
+		}
+	}	
 }
 
 void CMFCControlsDlg::OnBnClickedBtnCancel()
 {
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다
 	CDialogEx::OnCancel();
 }
