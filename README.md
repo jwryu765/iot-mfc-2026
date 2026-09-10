@@ -101,14 +101,14 @@ WndProc(
 ```
 
 - LRESULT : int64 타입 LONG_PTR 포인터 크기를 의미. 32비트 OS든 64비트 OS든 기존 소스 그대로 사용하고자 만든 타입
-
   - Windows 메시지를 처리한 다음 Windows에게 돌려주는 결과값
+
 - CALLBACK : 타입이 아니고 함수를 어떤 방식으로 호출할지 지정하는 매크로
 - `HWND` : 윈도우 핸들. 식별번호와 참조값. 윈도우 내부 객체(포인터)를 직접 접근하면 위험함. 그래서 조금만 잘못하면 프로그램이 깨질 수 있기 때문에 핸들값으로 전달
 - UINT : Unsigned Integer
 - WPARAM : Word Parameter(윈도우 크기만큼의 Unsigned Integer), 메시지에 첫번째 추가 메시지 데이터.
-
   - 마우스 클릭시 위치값(x, y 좌표 등)
+
 - LPARAM : Long Parameter(uint), 두번째 추가 메시지 데이터
 - [소스코드 설명](./basic/MfcBasicSolution/Win32FirstApp/main.cpp)
 
@@ -181,7 +181,7 @@ WndProc(
 HWND wnd = CreateWindow(...);
 ```
 
-MFC 는 각 컨트롤을 C_ 로 미리 만들어 놓음
+MFC 는 각 컨트롤을 C\_ 로 미리 만들어 놓음
 
 ```cpp
 CWnd
@@ -249,12 +249,11 @@ CStatic
 - 디자인 확인 가능
 - Dialog Based는 리소스에서 확인 가능하지만, SDI/MDI는 전체 화면을 확인할 메뉴/디자인뷰가 없음
 
-
-| 방식         | 의미                  |     난이도 |
-| ------------ | --------------------- | ---------: |
-| Dialog Based | 일반 폼 형태          |         ★ |
-| SDI          | 한 문서 중심 프로그램 |     ★★★ |
-| MDI          | 여러 문서/창 관리     | ★★★★★ |
+| 방식         | 의미                  | 난이도 |
+| ------------ | --------------------- | -----: |
+| Dialog Based | 일반 폼 형태          |      ★ |
+| SDI          | 한 문서 중심 프로그램 |    ★★★ |
+| MDI          | 여러 문서/창 관리     |  ★★★★★ |
 
 ##### CWinApp 클래스
 
@@ -281,7 +280,7 @@ WinMin() 실행
      ↓
 메시지 루프
      ↓
-WndProc() 
+WndProc()
 ```
 
 ```plaintext
@@ -291,7 +290,7 @@ MFC 내부 WinMain() 자동 실행
      ↓
 CWinApp
      ↓
-InitInstance() 
+InitInstance()
      ↓
 Dialog 생성
 ```
@@ -417,7 +416,7 @@ Visual Studio 가 제공하는 **GUI 디자이**너 기능. C# WinForms의 Form 
 ![](assets/20260903_094731_image.png)
 
 - STATIC, EDIT, BUTTON 세개로 구성
-- MFC에서 추천하는 이름은 일반적으로 IDC_ Prefix 사용
+- MFC에서 추천하는 이름은 일반적으로 IDC\_ Prefix 사용
 
 ##### ID가 가장 중요
 
@@ -695,21 +694,1050 @@ BOOL CMFCControlsDlg::OnInitDialog()
 
 - 실행결과
 
+#### Timer
+
+1초마다 시간이 변경되는 프로그램을 만들때 사용하는 컨트롤
+
+##### 대화상자 기반 프로젝트
+
+![](assets/20260907_092418_image.png)
+
+- 사용자 인터페이스에서 두꺼운 프레임, 최소화 상자, 최대화 상자, 시스템 메뉴 선택
+  - 윈폼 UI와 유사하게 디자인
+
+##### 타이머 예제
+
+- STATIC 2개 중 1개 실제 시간표시 컨트롤 : IDC_STATIC_TIME -> DDX 컨트롤 m_staticTime 변수 추가
+- BUTTON 2개 시작, 정지 버튼 : IDC_BTN_START, IDC_BTN_STOP
+
+##### Timer ID 정의
+
+타이머를 여러개 지정가능하므로 ID 지정
+
+`#define TIMER_CLOCK 1`
+
+##### 시작 버튼 함수
+
+메뉴 프로젝트 > 클래스 마법사 선택
+
+![](assets/20260907_094348_image.png)
+
+- 실제 MFC에서 클래스 추가 작업할 때 많이 사용하는 창
+
+##### WM_TIMER 메시지 추가
+
+- 클래스 마법사 창 메시지 탭에서 WM_TIMER 메시지 리스트에서 확인 후, 더블클릭
+- OnTimer 함수가 자동 추가됨
+
+##### 시작, 정지 버튼 함수 추가
+
+![](assets/20260907_101727_image.png)
+
+##### IDC_STATIC_TIME 글자크기 변경
+
+- Dlg 헤더에 `CFont m_fontTime` 추가
+- OnInitDialog() 에서 초기화 로직 추가
+
+![](assets/20260907_102522_image.png)
+
+- 폰트 변경화면
+
+#### 메뉴, 기본 Dialog
+
+##### 메뉴
+
+Dialog Based MFC에서는 적합하지 않음. SDI/MDI로 프로젝트 생성해야
+
+##### SDI 프로젝트 생성
+
+- 애플리케이션 종류 탭
+  - 단일 문서(SDI)
+  - 나머지는 기본으로
+
+- 문서 템플릿 속성
+  - 파일 확장명은 txt 처럼 확장자만
+  - 필터 이름 변경
+
+- 사용자 인터페이스 기능 - 그대로
+- 고급 기능
+  - 자동화, ActiveX 컨트롤, Windows 소켓 거의 필요없음. 체크 해제
+
+![](assets/20260907_104433_image.png)
+
+- 생성된 클래스 - 그대로
+
+![](assets/20260907_104216_image.png)
+
+- 실행결과
+
+##### SDI 구조 이해
+
+MainFrame : 메뉴, 툴바, 뷰, 상태바 등 전체 관리
+
+##### SDI 프로젝트 구조
+
+![](assets/20260907_112511_image.png)
+
+- 소스 파일
+  - ClassView.cpp : 왼쪽 클래스 뷰 창 만드는 코드
+  - FileView.cpp : 왼쪽 파일 뷰 창 만드는 코드
+  - MainFrm.cpp : SDI 가장 핵심 소스코드 ★★★★★
+  - MFCSdiMenuTest.cpp : 프로그램 시작 파일 ★★★★★
+  - MFCSdiMenuTestDoc.cpp : Document 클래스. 프로그램의 데이터 저장 ★★★
+  - MFCSdiMenuTestView.cpp : 개발중에 가장 많이 수정하는 파일. 화면에 그림을 그리는 역할 ★★★★★
+  - OutputWnd.cpp : 뷰 중앙아래 빌드, 디버그, 찾기 창 생성, 관리 코드
+  - pch.cpp : Precompiled Header 만드는 파일(기본)
+  - PropertiesWnd.cpp : 오른쪽 속성 창 만드는 코드
+  - ViewTree.cpp : 클래스, 파일 뷰의 트리 담당 코드
+  - 문서/뷰 아키텍처 선택시 - ClassView, FileView, MFCS..Doc, MFCS..View, OutputWnd, PropertiesWnd, ViewTree 7개 파일 추가
+- 헤더 파일
+  - ClassView.h : ClassView.cpp 연결
+  - FileView.h : FileView.cpp 연결
+  - framework.h : 프로젝트 공통 헤더
+  - MainFrm.h : MainFrm.cpp 연결
+  - MFCSdiMenuTest.h
+  - MFCSdiMenuTestDoc.h
+  - MFCSdiMenuTestView.h
+  - OutputWnd.h
+  - pch.h
+  - PropertiesWnd.h
+  - Resource.h : 프로젝트 리소스 아이디 ★★★
+  - targetver.h : 윈도우 타겟버전 설정
+  - ViewTree.h
+
+##### 창, 컨트롤 초기화 확인
+
+- MainFrm.cpp 내 OnCreate() 함수
+  - m_wndToolBar 관련 소스 주석 처리
+
+![](assets/20260907_115218_image.png)
+
+- 툴바 제거
+
+##### 파일뷰/클래스뷰 제거
+
+- MainFrm.h
+  - CFileView m_wndFileView 주석처리
+  - CClassView m_wndClassView 주석처리
+  - 도킹관련 void SetDockingWindowIcons(BOOL bHiColorIcons) 함수 주석처리
+- MainFrm.cpp
+  - OnCreate() 함수에 헤더파일에서 주석처리한 변수관련 오류코드 주석처리
+  - CreateDockingWindows() 오류코드 주석처리
+  - SetDockingWindowIcons() 함수를 주석처리
+
+##### 출력창, 속성창 제거
+
+- 위와 동일
+
+![](assets/20260907_121751_image.png)
+
+- 실행결과
+
+##### SDI 심플프로젝트
+
+- 도킹, 복잡한 뷰가 필요없을때 프로젝트를 간단하게 생성
+
+![](assets/20260908_094713_image.png)
+
+- 단일 문서, 문서/뷰 아키텍처 지원 체크 해제
+- 비주얼 스타일 전환 사용 체크 해제
+
+![](assets/20260908_094747_image.png)
+
+- 명령 모음 > 클래식 메뉴 사용
+- 클래식 메뉴 옵션 > 클래식 도킹 도구 모음 사용(툴바 생성)
+
+![](assets/20260908_092124_image.png)
+
+- 기능 축소로 만들었을때 파일 구조
+  - ChildView.cpp : 메인프레임 중앙 관리 소스 ★★★★★
+  - MainFrm.cpp : 내용 생략 ★★★★★
+  - MFCSimpleSdi.cpp : 프로그램 시작점 ★★★★★
+  - pch.cpp, framework.h ... : 위와 동일
+
+#### MainFrame
+
+- MainFrm.cpp : 메뉴, 툴바, 상태바, ChildView 외 추가적 클래스뷰, 파일뷰, 출력창, 속성창 을 관리하는 영역
+- PreCreateWindow() : 윈도우 창 만들어지기 직전 호출되는 함수. 기존 설정되어 있던 속성을 변경하고할 때
+- OnCreate() : 창 생성, 메뉴 생성, 툴바 생성, 상태바 생성(추가적인 창도 생성)
+
+##### Menu 생성
+
+MainFrame에서 IDR_MAINFRAME 리소스 만들면 자동으로 생성
+
+##### 메뉴 리소스
+
+IDR_MAINFRAME 더블클릭 (심플 프로젝트에서는 메뉴가 다름)
+
+![](assets/20260907_111620_image.png)
+
+- 메뉴 추가시 키보드 단축키(Alt) 사용 위해서 & 추가 `실습(&P)`
+
+![](assets/20260908_100457_image.png)
+
+- 하위 메뉴 메시지 출력 추가
+- 메시지 출력 체크 속성창 ID_32771 -> ID_PRAC_MSG 로 변경
+- 이벤트를 추가하고자 하는 메뉴 > Context Menu > 이벤트 처리기 추가 클릭
+
+![](assets/20260908_101257_image.png)
+
+- 클래스 목록에서 ChildView나 CMainFrame 선택
+
+![](assets/20260908_101543_image.png)
+
+- AfxMessageBox 추가 결과
+
+```cpp
+BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
+    ON_WM_CREATE()
+    ON_WM_SETFOCUS()
+    ON_COMMAND(ID_PRAC_MSG, &CMainFrame::OnPracMsg)
+END_MESSAGE_MAP()
+```
+
+- 버튼 클릭이나 메뉴 클릭 등 메시지가 발생하는 기능 들은 메시지맵에 자동 추가
+-
+- 체크 메뉴 아이디 ID_MENU_CHECK 로 변경
+- 멤버변수 추가 bool m_bChecked = false
+- 체크 메뉴 이벤트 처리기 추가
+
+```cpp
+void CMainFrame::OnMenuCheck()
+{
+    CMenu* pMenu = GetMenu();
+
+    m_bChecked = !m_bChecked;
+
+    pMenu->CheckMenuItem(
+        ID_MENU_CHECK,
+        MF_BYCOMMAND |
+        (m_bChecked ? MF_CHECKED : MF_UNCHECKED)
+    );
+
+    // TODO : 체크가 되었을때 처리로직과 체크해제시 로직 분리 작성
+}
+```
+
+![](assets/20260908_103031_image.png)
+
+- 메뉴 체크기능 결과 화면
+- 메뉴에 - 입력하면 가로줄 추가됨
+- 단축키 는 추후 학습 요
+
+##### ChildView
+
+```cpp
+void CChildView::OnPaint()
+{
+    CPaintDC dc(this); // 그리기를 위한 디바이스 컨텍스트입니다.
+
+    // TODO: 여기에 메시지 처리기 코드를 추가합니다.
+    // 그리기 메시지에 대해서는 CWnd::OnPaint()를 호출하지 마십시오.
+    dc.TextOutW(100, 100, L"MFC ChildView");
+}
+
+```
+
+- Win32 API에서 WM_PAINT 와 같은 역할
+
+![](assets/20260908_103843_image.png)
+
+##### GDI
+
+- 윈도우 앱에서 그림을 그리는 인터페이스 기능
+- OnPaint() 에 진행
+
+```cpp
+	// GDI
+	dc.MoveTo(100, 80); // 선이 시작할 위치로 이동
+	dc.LineTo(330, 80); // 좌표까지 직선 그리기
+
+	dc.Rectangle(100, 120, 300, 300);
+	dc.Ellipse(100, 120, 300, 300);
+
+	CPen pen;   // 펜 생성
+	pen.CreatePen(PS_SOLID, 5, RGB(255, 0, 0));
+
+	dc.SelectObject(&pen);  // 펜 선택
+
+	dc.MoveTo(100, 340);
+	dc.LineTo(330, 340);
+```
+
+![](assets/20260908_105202_image.png)
+
+- 실행결과
+
+##### MFC 마우스
+
+- 마우스 메시지
+  - WM_LBUTTONDOWN -> OnLButtonDown()
+  - WM_LBUTTONUP -> OnLButtonUp()
+  - WM_MOUSEMOVE -> OnMouseMove()
+  - WM_RBUTTONDOWN -> OnRButtonDown()
+
+```cpp
+void CChildView::OnLButtonDown(UINT nFlags, CPoint point) {
+	CString str;
+
+	str.Format(L"(%d, %d)", point.x, point.y);
+
+	AfxMessageBox(str);
+
+	CWnd::OnLButtonDown(nFlags, point);
+}
+```
+
+![](assets/20260908_112451_image.png)
+
+- 마우스 왼쪽 버튼 클릭이벤트 실행결과
+
+```cpp
+void CChildView::OnMouseMove(UINT nFlags, CPoint point) {
+	CString str;
+
+	str.Format(L"x=%d, y=%d", point.x, point.y);
+	GetParent()->SetWindowText(str); // 부모창(MainFrame)의 제목표시줄에 str를 할당
+
+	CWnd::OnMouseMove(nFlags, point);
+}
+```
+
+![](assets/20260908_113016_image.png)
+
+- MouseMove 실행결과
+
+```cpp
+private:
+	CPoint m_ptClick;  // 클릭한 위치 기억 변수
+```
+
+- 마우스 클릭 위치 저장변수 m_ptClick
+
+```cpp
+	m_ptClick = point;
+
+	Invalidate();  // 화면 다시그리기 요청 함수
+
+	CWnd::OnLButtonDown(nFlags, point);
+```
+
+- OnLButtonDown에 위 코드 추가
+
+```cpp
+	dc.Ellipse(
+		m_ptClick.x - 30,
+		m_ptClick.y - 30,
+		m_ptClick.x + 30,
+		m_ptClick.y + 30
+	);  // 마우스 클릭시마다 원 변경
+```
+
+- OnPaint() 아래 원그리기 함수 추가
+
+https://github.com/user-attachments/assets/540ef5ed-f58e-4123-b381-53a579dd118e
+
+```cpp
+bool m_bDrag = false;
+CPoint m_ptCircle = CPoint(200, 200);
+```
+
+- 마우스 드래그 여부 확인변수 m_bDrag
+- 원을 그릴 위치 변수 m_ptCircle
+
+```cpp
+void CChildView::OnPaint()
+{
+    ...
+	CPen pen2;   // 펜 생성
+	pen2.CreatePen(PS_SOLID, 4, RGB(0, 0, 255));
+	dc.SelectObject(&pen2);  // 펜 선택
+
+	dc.Ellipse(
+		m_ptCircle.x - 30,
+		m_ptCircle.y - 30,
+		m_ptCircle.x + 30,
+		m_ptCircle.y + 30
+	);
+} // end of OnPaint()
+
+void CChildView::OnLButtonDown(UINT nFlags, CPoint point) {
+	...
+	m_bDrag = true;
+	Invalidate();  // 화면 다시그리기 요청 함수
+	CWnd::OnLButtonDown(nFlags, point);
+} // end of OnLButtonDown()
+
+void CChildView::OnLButtonUp(UINT nFlags, CPoint point) {
+	m_bDrag = false;
+} // end of OnLButtonUp()
+
+void CChildView::OnMouseMove(UINT nFlags, CPoint point) {
+	...
+
+	if (m_bDrag) {
+		m_ptCircle = point;
+
+		Invalidate();  // 화면 업데이트
+	}
+
+	CWnd::OnMouseMove(nFlags, point);
+} // end of OnMouseMove()
+
+```
+
+![](assets/20260909_093256_image.png)
+
+- 마우스 클릭 위치에 빨간원, 드래그시 파란원 따라옴
+
+##### MFC 키보드
+
+- Win32 API 비교
+  - WM_KEYDOWN -> OnKeyDown()
+  - WM_KEYUP -> OnKeyUp()
+  - WM_CHAR -> OnChar() : 특정 키를 눌렀을때
+- MessageMap
+
+![](assets/20260909_093904_image.png)
+
+- 메뉴 프로젝트 > 클래스 마법사로 추가 가능
+- OnKeyDown() : 모든 키보드의 키값을 가져오기
+- OnChar() : 숫자, 알파벳등 실제 키값만 가져옴. 특수키 제외
+- OnKeyUp() : 어떤 키던지 누르고 떼면 발생
+
+![](assets/20260909_095030_image.png)
+
+- 대문자 A를 눌렀을때 OnKeyDown() 발생 결과
+
+```cpp
+void CChildView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	switch (nChar) {
+	case VK_LEFT:
+		m_ptBox.x -= 10;
+		break;
+	case VK_RIGHT:
+		m_ptBox.x += 10;
+		break;
+	case VK_UP:
+		m_ptBox.y -= 10;
+		break;
+	case VK_DOWN:
+		m_ptBox.y += 10;
+		break;
+	}
+
+	Invalidate();  // 화면 다시그리기 요청 함수
+
+	CWnd::OnKeyDown(nChar, nRepCnt, nFlags);
+}
+```
+
+![](assets/20260909_101718_image.png)
+
+- 키보드로 박스 이동 결과화면
+- 만약 키보드가 입력이 안되면. SetFocus() 함수 실행
+
+##### 툴바
+
+- 메뉴바 아래에 아이콘으로 존재하는 버튼 모음
+- 메뉴 중에서 자주 사용하는 기능을 버튼으로 빼놓은 것
+- 툴바는 MainFrame에서 관리 - Resource View에서 확인
+
+![](assets/20260909_103727_image.png)
+
+- VS 비트맵 에디터에서 수정 가능 -> Paint.NET 등의 그래픽편집기로 수정
+- MFC 클래식 툴바 이미지 4bit bmp로 반드시 지정
+
+![](assets/20260909_104137_image.png)
+
+- 이벤트 추가
+
+```cpp
+void CMainFrame::OnToolPrac()
+{
+	OnPracMsg(); // 이전에 만들었던 메뉴 클릭함수 호출
+}
+```
+
+- 메뉴 클릭 함수를 그대로 호출
+
+##### 상태바
+
+- 프로그램 내 여러 상태를 표시하는 컨트롤
+
+```cpp
+static UINT indicators[] =
+{
+	ID_SEPARATOR,         // 상태 줄 표시기
+	ID_INDICATOR_CAPS,    // 캡락
+	ID_INDICATOR_NUM,     // 넘버락
+	ID_INDICATOR_SCRL,    // 스크롤락
+};
+
+
+```
+
+- 상태바 객체변수는 MainFrame에 protected로 선언되어 자식창에서 접근불가
+
+```cpp
+void CMainFrame::SetStatusText(CString str)
+{
+	m_wndStatusBar.SetPaneText(0, str);
+}
+```
+
+```cpp
+#include "MainFrm.h"
+```
+
+- ChildView.cpp에 MainFrm.h 추가
+
+```cpp
+void CChildView::OnLButtonDown(UINT nFlags, CPoint point) {
+	CString str;
+	str.Format(L"(%d, %d)", point.x, point.y);
+
+	CMainFrame* pFrame = (CMainFrame*)AfxGetMainWnd();  // 부모창 MainFrame 포인터 가져오기
+	pFrame->SetStatusText(str); // 상태바 표시함수 호출
+        ...
+
+```
+
+![](assets/20260909_112109_image.png)
+
+- 마우스 클릭위치 표시
+
+##### Dialog
+
+- Dialog Based MFC와 동일
+- SDI나 MDI에서 파일오픈, 파일저장 등의 추가 팝업창을 띄울 때 사용
+
+![](assets/20260909_112654_image.png)
+
+- 메뉴에서 열기(ID_FILE_OPEN), 저장(ID_FILE_SAVE) 생성
+
+![](assets/20260909_113020_image.png)
+
+- 클래스 마법사 사용시 `클래스 이름` 선택 주의!
+
+```cpp
+void CMainFrame::OnFileOpen()
+{
+	CFileDialog dlg(
+		TRUE,
+		L"txt",
+		NULL,
+		OFN_FILEMUSTEXIST | OFN_HIDEREADONLY,
+		L"텍스트 파일 (*.txt)|*.txt|모든 파일 (*.*)|*.*||"
+		);
+	CString path;
+
+	if (dlg.DoModal() == IDOK) {
+		// 파일을 선택했으면 처리
+		path = dlg.GetPathName();
+
+		m_wndStatusBar.SetPaneText(0, path);
+	}
+}
+```
+
+![](assets/20260909_113929_image.png)
+
+- 파일 오픈 다이얼로그
+
+```cpp
+CFileDialog dlg(
+		FALSE,     // 파일 저장
+		L"txt",
+		NULL,
+		OFN_FILEMUSTEXIST | OFN_HIDEREADONLY,
+		L"텍스트 파일 (*.txt)|*.txt|모든 파일 (*.*)|*.*||"
+		);
+```
+
+##### Custom Dialog
+
+- 메뉴 프로젝트 > 클래스 마법사 > 클래스 추가 > MFC 클래스
+
+![](assets/20260909_120300_image.png)
+
+- 입력 후 확인
+
+```cpp
+void CMainFrame::OnPracMsg()
+{
+	AfxMessageBox(L"Hello, MFC!");
+
+	CTestDlg dlg;   // include 필요!
+	dlg.DoModal();
+}
+```
+
+![](assets/20260909_120642_image.png)
+
+- 커스텀 다이얼로그 실행화면
+
+##### MFC 스레드
+
+- Process와 Thread 차이
+  - Process : 하나의 실행파일
+  - Thread : 실행파일 내 CPU가 실제로 실행하는 작업 흐름. 시분할로 여러개를 나눠서 실행
+
+![](assets/20260910_093027_image.png)
+
+- AfxBeginThread() 함수로 시작
+
+```cpp
+CWinThread* AfxBeginThread(
+    AFX_THREADPROC pfnThreadProc,    // AFX_THREADPROC - Thread 함수의 주소. 이 함수를 실행하라는 의미
+    LPVOID pParam                    // void* - 아무 자료형이나 전달가능
+);
+```
+
+- Thread 함수
+
+```cpp
+UINT ThreadProc(LPVOID pParam) {    // UINT - 종료하면서
+   ....
+   return 0;    // 정상종료
+}
+```
+
+- 스레드 실행
+
+```cpp
+AfxBeginThread(ThreadProc, NULL);
+```
+
+- MFC Dialog 프로젝트
+
+![](assets/20260910_095127_image.png)
+
+![](assets/20260910_095135_image.png)
+
+```cpp
+void CMFCThreadBasicDlg::OnBnClickedBtnThread()
+{
+	AfxBeginThread(ThreadProc, NULL);  // 스레드 호출
+
+	//AfxMessageBox(L"Main Thread");
+	TRACE(L"Main Thread\n");
+}
+
+UINT CMFCThreadBasicDlg::ThreadProc(LPVOID pParam)
+{
+	for (int i = 1; i <= 10; i++) {
+		TRACE(L"Thread : %d\n", i);
+
+		Sleep(1000); // 1초 대기
+	}
+
+	return 0;
+}
+
+```
+
+- 스레드 시작 버튼을 누를때 마다 신규 스레드 계속 생성
+
+```cpp
+void CMFCThreadBasicDlg::OnBnClickedBtnThread()
+{
+	int value = 100;
+
+	AfxBeginThread(ThreadProc, &value);  // 스레드 호출
+
+	//AfxMessageBox(L"Main Thread");
+	TRACE(L"Main Thread\n");
+}
+
+UINT CMFCThreadBasicDlg::ThreadProc(LPVOID pParam)
+{
+	int* pValue = (int*) pParam;
+	int param = *pValue;
+
+	for (int i = 1; i <= 10; i++) {
+		TRACE(L"Thread : %d - %d\n", i, param);
+
+		Sleep(1000); // 1초 대기
+	}
+
+	return 0;
+}
+```
+
+- 파라미터 전달해서 스레드 호출
+- WPF, C# WinForm(Python 동일) 스레드에서 UI를 직접 수정하지 말 것
+
+![](assets/20260910_102314_image.png)
+
+- 프로그레스바 추가
+
+![](assets/20260910_102413_image.png)
+
+- DDX -Control 변수 추가
+
+```cpp
+BOOL CMFCThreadBasicDlg::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+	...
+	// TODO: 여기에 추가 초기화 작업을 추가합니다.
+	m_progress.SetRange(0, 1000);
+	m_progress.SetPos(0);
+
+	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
+}
+
+void CMFCThreadBasicDlg::OnBnClickedBtnThread()
+{
+	AfxBeginThread(ThreadProc, this);  // this, Dialog를 Thread에게 전달. UI에 있는 컨트롤 직접 제어
+	TRACE(L"Main Thread\n");
+}
+
+UINT CMFCThreadBasicDlg::ThreadProc(LPVOID pParam)
+{
+	CMFCThreadBasicDlg* pDlg = (CMFCThreadBasicDlg*)pParam;
+
+	for (int i = 0; i <= 1000; i++) {
+		pDlg->m_progress.SetPos(i);   // UI를 제어!
+		Sleep(5); // 50ms 딜레이
+	}
+	return 0;
+}
+
+```
+
+![](assets/20260910_103403_image.png)
+
+- 실행이 잘 될수 있고, 안될 수도 있음
+- Main Thread가 UI를 관리하는데 사용자 스레드가 프로그레스바(UI)를 제어하고 있음
+- 직접 제어하지 말고 메인 스레드에게 UI변경을 요청하도록 변경
+
+```cpp
+#define WM_PROGRESS_UPDATE (WM_USER + 1)  // 프로그레스바위해서 새로 만드는 메시지
+```
+
+- 새로운 윈도우 메시지 생성
+
+```cpp
+BEGIN_MESSAGE_MAP(CMFCThreadBasicDlg, CDialogEx)
+	ON_WM_SYSCOMMAND()
+	ON_WM_PAINT()
+	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_BTN_THREAD, &CMFCThreadBasicDlg::OnBnClickedBtnThread)
+
+	ON_MESSAGE(
+		WM_PROGRESS_UPDATE,
+		&CMFCThreadBasicDlg::OnProgressUpdate)
+END_MESSAGE_MAP()
+
+```
+
+- 다이얼로그 메시지맵에 ON_MESSAGE 추가
+
+```cpp
+afx_msg LRESULT OnProgressUpdate(WPARAM wParam, LPARAM lParam);
+```
+
+- 헤더에 OnProgressUpdate() 선언
+
+```cpp
+UINT CMFCThreadBasicDlg::ThreadProc(LPVOID pParam)
+{
+	CMFCThreadBasicDlg* pDlg = (CMFCThreadBasicDlg*)pParam;
+
+	for (int i = 0; i <= 1000; i++) {
+		//pDlg->m_progress.SetPos(i);
+		// 윈도우 메시지에게 프로그레스바 값 변경을 대신 요청
+		pDlg->PostMessage(WM_PROGRESS_UPDATE, i, 0);
+
+		Sleep(5); // 50ms 딜레이
+	}
+
+	return 0;
+}
+
+LRESULT CMFCThreadBasicDlg::OnProgressUpdate(WPARAM wParam, LPARAM lParam)
+{
+	m_progress.SetPos((int)wParam);
+
+	return LRESULT();
+}
+```
+
+- 결론 : UI스레드(메인스레드)와 사용자스레드는 분리할 것!!
+
+#### 메모장 프로젝트
+
+- SDI 시작
+
+##### ChildView에 Edit Control 추가
+
+```cpp
+public:
+	CEdit m_edit;  // 에디트 컨트롤
+```
+
+##### 메시지맵 추가
+
+```cpp
+BEGIN_MESSAGE_MAP(CChildView, CWnd)
+	ON_WM_CREATE()
+	ON_WM_SIZE()
+```
+
+##### 함수 선언
+
+```cpp
+protected:
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnSize(UINT nType, int cx, int cy);
+```
+
+##### 함수 정의 구현
+
+```cpp
+int CChildView::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	if (CWnd::OnCreate(lpCreateStruct) == -1)
+		return -1;
+
+	m_edit.Create(
+		WS_CHILD | WS_VISIBLE |
+		WS_BORDER | ES_MULTILINE |
+		ES_AUTOVSCROLL | WS_VSCROLL,
+		CRect(0, 0, 100, 100),  // w 100, h 100
+		this,
+		1000
+	);
+
+	return 0;
+}
+
+void CChildView::OnSize(UINT nType, int cx, int cy)
+{
+	CWnd::OnSize(nType, cx, cy);
+
+	if (m_edit.GetSafeHwnd()) {
+		m_edit.MoveWindow(0, 0, cx, cy);
+	}
+}
+```
+
+##### 메뉴에서 보기 삭제
+
+![](assets/20260910_111538_image.png)
+
+- 실행화면
+
+##### 텍스트 파일 열기
+
+![](assets/20260910_111836_image.png)
+
+- 메뉴 리소스, 열기, 저장메뉴 추가
+- 이벤트 처리기 추가
+
+![](assets/20260910_112953_image.png)
+
+- 클래스 목록에서 CMainFrame으로 반드시 바꿀 것
+
+```cpp
+public:
+	virtual ~CChildView();
+
+	void SetText(const CString& text);
+```
+
+- ChildView 헤더에 SetText() 함수 선언
+
+```cpp
+void CChildView::SetText(const CString& text)
+{
+	m_edit.SetWindowText(text);
+}
+```
+
+- SetText() 구현
+
+![](assets/20260910_113608_image.png)
+
+- 실행화면 - 한글 깨짐
+- CStdioFile - 기본적으로 CP949(ANSI | EUC-KR) 기준으로 텍스트 로드
+- CFile 로 변경 방법
+
+```cpp
+void CMainFrame::OnFileOpen()
+{
+	CFileDialog dlg(
+		TRUE,
+		L"txt",
+		NULL,
+		OFN_FILEMUSTEXIST | OFN_HIDEREADONLY,
+		L"텍스트 파일 (*.txt)|*.txt||");
+
+	if (dlg.DoModal() != IDOK)
+		return;
+
+	CString strPath;
+	strPath = dlg.GetPathName();
+
+	CFile file;
+
+	if (!file.Open(strPath, CFile::modeRead)) {
+		AfxMessageBox(L"파일을 열 수 없습니다.");
+		return;
+	}
+
+	DWORD size = (DWORD)file.GetLength();
+	std::vector<BYTE> buffer(size);
+	file.Read(buffer.data(), size);
+
+	file.Close();
+
+	// UTF-8인지 EUC-KR인지 검사
+	bool bUTF8 = false;
+	int offset = 0;
+
+	if (size >= 3 &&
+		buffer[0] == 0xEF &&
+		buffer[1] == 0xBB &&
+		buffer[2] == 0xBF)
+	{
+		bUTF8 = true;
+		offset = 3;
+	}
+
+	CString strText;
+
+	if (bUTF8) {
+		int len = MultiByteToWideChar(
+			CP_UTF8,
+			0,
+			(LPCCH)(buffer.data() + offset),
+			size - offset,
+			NULL,
+			0);
+
+		MultiByteToWideChar(
+			CP_UTF8,
+			0,
+			(LPCCH)(buffer.data() + offset),
+			size - offset,
+			strText.GetBuffer(len),
+			len);
+
+		strText.ReleaseBuffer(len);
+	}
+	else {
+		int len = MultiByteToWideChar(
+			CP_ACP,
+			0,
+			(LPCCH)buffer.data(),
+			size,
+			NULL,
+			0);
+
+		MultiByteToWideChar(
+			CP_ACP,
+			0,
+			(LPCCH)buffer.data(),
+			size,
+			strText.GetBuffer(len),
+			len);
+
+		strText.ReleaseBuffer(len);
+	}
+
+	m_wndView.SetText(strText);  // ChildView에 추가한 함수 호출
+}
+```
+
+![](assets/20260910_114736_image.png)
+
+- 한글 문제 해결
+
+##### 텍스트 저장
+
+```cpp
+CString GetText();
+```
+
+- ChildView.h 에 선언추가
+
+```cpp
+CString CChildView::GetText()
+{
+	CString str;
+	m_edit.GetWindowText(str);
+	return str;
+}
+```
+
+- ChileView GetText() 함수 구현
+
+```
+void CMainFrame::OnFileSave()
+{
+	CFileDialog dlg(
+		FALSE,
+		L"txt",
+		L"NewFile.txt",    // 기본 이름
+		OFN_OVERWRITEPROMPT,
+		L"텍스트 파일 (*.txt)|*.txt||");
+
+	if (dlg.DoModal() != IDOK)
+		return;
+
+	CString strPath = dlg.GetPathName();
+
+	CString strText = m_wndView.GetText();
+
+	CStringA utf8 = CW2A(strText, CP_UTF8);
+	CFile file;
+
+	if (!file.Open(strPath, CFile::modeCreate | CFile::modeWrite))
+	{
+		AfxMessageBox(L"파일 저장 실패!");
+		return;
+	}
+
+	// UTF-8 BOM
+	BYTE bom[] = { 0xEF, 0xBB, 0xBF };
+	file.Write(bom, sizeof(bom));
+
+	file.Write(
+		utf8.GetString(),
+		utf8.GetLength());
+
+	file.Close();
+
+	AfxMessageBox(L"저장되었습니다.");
+}
+```
+
+![](assets/20260910_121115_image.png)
+
+- 실행결과
+- 새 문서, 툴바 기능, 상태바 표시 기능 추가
+
 #### MFC 학습 순서
 
-1. [X]  Dialog Based MFC
-2. [X]  CWinApp / CDialogEx 이해
-3. [X]  Resource Editor
-4. [X]  Button / Static / Edit / CheckBox / Radio Button 컨트롤 학습
-5. [X]  컨트롤 사용 간단 프로젝트
-6. [X]  Message Map 이해
-7. [X]  이벤트 처리 방법 이해
-8. [X]  컨트롤 값 읽기 / 쓰기
-9. [X]  DDX / DDV
-10. [ ]  Timer
-11. [ ]  메뉴 / 파일 Dialog
-12. [ ]  SDI(Single Document Interface)
-13. [ ]  MDI(Multiple DI)
-14. [ ]  GDI(Graphic Device Interface) : 원, 사각형 그래픽 그리기
-15. [ ]  스레드...
-16. [ ]  토이프로젝트 : 메모장(NotePad) 프로젝트
+1. [x] Dialog Based MFC
+2. [x] CWinApp / CDialogEx 이해
+3. [x] Resource Editor
+4. [x] Button / Static / Edit / CheckBox / Radio Button 컨트롤 학습
+5. [x] 컨트롤 사용 간단 프로젝트
+6. [x] Message Map 이해
+7. [x] 이벤트 처리 방법 이해
+8. [x] 컨트롤 값 읽기 / 쓰기
+9. [x] DDX / DDV
+10. [x] Timer
+11. [x] SDI(Single Document Interface)
+12. [x] GDI(Graphic Device Interface) : 원, 사각형 그래픽 그리기
+13. [x] 메뉴
+14. [x] 툴바
+15. [x] Dialog
+16. [ ] ~~MDI(Multiple DI)~~
+17. [x] 스레드...
+18. [x] 토이프로젝트 : 메모장(NotePad) 프로젝트
